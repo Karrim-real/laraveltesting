@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\TestController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -19,4 +20,16 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::controller(AuthController::class)->group(function(){
+
+    //register route
+    Route::post('register', 'Register');
+    Route::post('login', 'Login');
+
+    Route::middleware(["auth:api"])->group(function(){
+        Route::get('profile', 'Profile');
+        Route::post('logout', 'Logout');
+    });
+
+});
 

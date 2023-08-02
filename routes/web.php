@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\Auth\AuthController;
 use App\Models\User;
 use GuzzleHttp\Psr7\Request;
 use Illuminate\Support\Facades\Route;
@@ -24,28 +25,9 @@ Route::get('/hello', function () {
     return "Hello world";
 });
 
-Route::get('users', function(){
-    $users = User::all();
 
 
-    if (count($users) > 0) {
-        foreach($users as $user){
-        $user->api_token = Str::random(80);
-        $user->save();
-        }
-        return response()->json([
-            'status' => 1,
-            'message' => 'All users',
-            'Number of user' => count($users),
-            'data' => $users
-        ], 200);
-    }
-    return response()->json([
-        'status' => 0,
-        'message' => 'No User Available'
-    ]);
-
-});
+Route::get('users', [AuthController::class, 'allUsers']);
 
 
 
