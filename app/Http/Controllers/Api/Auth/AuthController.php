@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\ProcessUser;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -53,6 +54,7 @@ class AuthController extends Controller
         $user = User::create($validateData);
         if ($user) {
             $accessToken = $user->createToken('auth_token')->accessToken;
+            ProcessUser::dispatch($user->id);
 
             return response()->json([
                 'status' => 1,
