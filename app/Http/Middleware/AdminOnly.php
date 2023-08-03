@@ -15,6 +15,15 @@ class AdminOnly
      */
     public function handle(Request $request, Closure $next): Response
     {
-        return $next($request);
+        if (auth()->user()) {
+            if (auth()->user()->role_as == 1) {
+                return $next($request);
+            }
+            return response()->json([
+                'status' => '0',
+                'message' => 'Unauthorized Access'
+            ]);
+        }
+
     }
 }
